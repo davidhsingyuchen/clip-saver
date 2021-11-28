@@ -1,4 +1,4 @@
-module clip-saver
+module github.com/davidhsingyuchen/clip-saver
 
 go 1.17
 

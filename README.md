@@ -13,10 +13,20 @@ When I'm watching movies on Windows and feeling like taking a screenshot, I pref
 1. Terminate the program.
 1. Enjoy your screenshots!
 
-## Build
+## Prerequisites
 
 [Install Go](https://golang.org/doc/install).
 
+### Installation
+
 ```sh
-go build -v
+go install -v github.com/davidhsingyuchen/clip-saver@latest
+```
+
+### Build From Source
+
+```sh
+git clone git@github.com:davidhsingyuchen/clip-saver.git
+cd clip-saver
+go build -v -o clip-saver
 ```

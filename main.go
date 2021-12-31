@@ -54,6 +54,9 @@ func saveClips(ctx context.Context, dir string, startIdx int) error {
 		}
 
 		file, err := os.Create(fileName)
+		if err != nil {
+			return fmt.Errorf("failed to create %q: %w", fileName, err)
+		}
 		if _, err := file.Write(img); err != nil {
 			return fmt.Errorf("failed to write the clip to %q: %v", fileName, err)
 		}

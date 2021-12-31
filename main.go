@@ -20,8 +20,17 @@ const (
 )
 
 func main() {
-	dir := flag.String("dir", "", "required; the directory to save the clipped images t; "+
-		"if it does not exist yet, this program will attempt to create it")
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage: clip-saver --dir <dir> [--start-idx <idx>]\n\n"+
+			"Assume that <start-idx> is set to be 6, "+
+			"then the screenshots will be saved in <dir> as 6.png, 7.png, and so on.\n\n",
+		)
+		flag.PrintDefaults()
+	}
+	dir := flag.String("dir", "", "required; the directory to save the clipped images; "+
+		"if it does not exist yet, this program will attempt to create it; "+
+		"be aware that an existing file in this directory could be overwritten by this program "+
+		`if its name conforms to the "<n>.png" format, and n is larger than the <start-idx>`)
 	startIdx := flag.Int("start-idx", 0, "optional; the starting index of the image file names")
 	flag.Parse()
 

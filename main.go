@@ -20,8 +20,8 @@ const (
 )
 
 func main() {
-	dir := flag.String("dir", "", "required; the directory to save the clipped images to"+
-		"if it does not exist, this program will attempt to create it")
+	dir := flag.String("dir", "", "required; the directory to save the clipped images t; "+
+		"if it does not exist yet, this program will attempt to create it")
 	startIdx := flag.Int("start-idx", 0, "optional; the starting index of the image file names")
 	flag.Parse()
 

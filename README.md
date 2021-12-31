@@ -13,7 +13,7 @@ When I'm watching movies on Windows and feeling like taking a screenshot, I pref
 1. Terminate the program.
 1. Enjoy your screenshots!
 
-## Prerequisites
+## Use It
 
 [Install Go](https://golang.org/doc/install).
 

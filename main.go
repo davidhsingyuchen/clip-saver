@@ -28,9 +28,7 @@ func main() {
 		flag.PrintDefaults()
 	}
 	dir := flag.String("dir", "", "required; the directory to save the clipped images; "+
-		"if it does not exist yet, this program will attempt to create it; "+
-		"be aware that an existing file in this directory could be overwritten by this program "+
-		`if its name conforms to the "<n>.png" format, and n is larger than the <start-idx>`)
+		"if it does not exist yet, this program will attempt to create it")
 	startIdx := flag.Int("start-idx", 0, "optional; the starting index of the image file names")
 	flag.Parse()
 

@@ -60,14 +60,23 @@ func saveClips(ctx context.Context, dir string, startIdx int) error {
 			return fmt.Errorf("file already exists: %q", fileName)
 		}
 
-		file, err := os.Create(fileName)
-		if err != nil {
-			return fmt.Errorf("failed to create %q: %w", fileName, err)
-		}
-		if _, err := file.Write(img); err != nil {
-			return fmt.Errorf("failed to write the clip to %q: %v", fileName, err)
+		if err := writeImgToFile(img, fileName); err != nil {
+			return fmt.Errorf("failed to write the clip to %q: %w", fileName, err)
 		}
 		log.Printf("Wrote to %q successfully!", fileName)
+	}
+	return nil
+}
+
+func writeImgToFile(img []byte, fileName string) error {
+	file, err := os.Create(fileName)
+	if err != nil {
+		return fmt.Errorf("failed to create the file: %w", err)
+	}
+	defer file.Close()
+
+	if _, err := file.Write(img); err != nil {
+		return fmt.Errorf("failed to write to the file: %w", err)
 	}
 	return nil
 }

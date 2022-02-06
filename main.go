@@ -55,7 +55,7 @@ func saveClips(ctx context.Context, dir string, startIdx int) error {
 		_, err := os.Stat(fileName)
 		if !errors.Is(err, os.ErrNotExist) {
 			if err != nil {
-				return fmt.Errorf("failed to stat %q: %v", fileName, err)
+				return fmt.Errorf("failed to stat %q: %w", fileName, err)
 			}
 			return fmt.Errorf("file already exists: %q", fileName)
 		}

@@ -17,6 +17,7 @@ const (
 	dirPerm = 0700
 	imgPerm = 0600
 	fileExt = ".png"
+	version = "v0.2.0"
 )
 
 func main() {
@@ -30,8 +31,13 @@ func main() {
 	dir := flag.String("dir", "", "required; the directory to save the clipped images; "+
 		"if it does not exist yet, this program will attempt to create it")
 	startIdx := flag.Int("start-idx", 0, "optional; the starting index of the image file names")
+	printVer := flag.Bool("version", false, "print version information")
 	flag.Parse()
 
+	if *printVer {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 	if *dir == "" {
 		log.Fatalln("--dir is required")
 	}

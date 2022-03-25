@@ -35,7 +35,7 @@ go build -v -o clip-saver
 
 ## Release Process
 
-1. The `version` constant in `main.go` is bumped according to semantic versioning.
+1. The `version` constant in `main.go` is bumped according to [semantic versioning](https://semver.org/).
 1. A release corresponding to the updated version is cut manually via Github UI.
 
 ## Other Notes

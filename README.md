@@ -37,3 +37,7 @@ go build -v -o clip-saver
 
 1. The `version` constant in `main.go` is bumped according to semantic versioning.
 1. A release corresponding to the updated version is cut manually via Github UI.
+
+## Other Notes
+
+I personally use [Sandboxie](https://sandboxie-plus.com/downloads/) to take screenshots on Netflix. I'm not affiliated with it in any way.

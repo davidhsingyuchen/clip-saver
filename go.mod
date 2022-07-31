@@ -9,4 +9,5 @@ require (
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
 	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect
 	golang.org/x/sys v0.0.0-20220318055525-2edf467146b5 // indirect
+	gopkg.in/yaml.v3 v3.0.1
 )

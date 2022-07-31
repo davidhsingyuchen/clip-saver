@@ -2,20 +2,19 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 
-	"golang.design/x/clipboard"
+	"github.com/davidhsingyuchen/clip-saver/infra"
 )
 
 const (
-	dirPerm = 0700
-	imgPerm = 0600
-	fileExt = ".png"
-	version = "v0.2.0"
+	version = "v0.3.0"
+
+	dirPerm         = 0700
+	defaultConfName = "clip-saver.yaml"
 )
 
 func main() {
@@ -28,6 +27,9 @@ func main() {
 	}
 	dir := flag.String("dir", "", "required; the directory to save the clipped images; "+
 		"if it does not exist yet, this program will attempt to create it")
+	confPath := flag.String("conf", "", "optional; the path to the configuration file; "+
+		fmt.Sprintf("if it is not provided, {$dir}/%s is used; ", defaultConfName)+
+		"if the file does not exist, movie mode instead of TV series mode is assumed")
 	startIdx := flag.Int("start-idx", 0, "optional; the starting index of the image file names")
 	printVer := flag.Bool("version", false, "print version information")
 	flag.Parse()
@@ -36,6 +38,7 @@ func main() {
 		fmt.Println(version)
 		os.Exit(0)
 	}
+
 	if *dir == "" {
 		log.Fatalln("--dir is required")
 	}
@@ -43,58 +46,31 @@ func main() {
 		log.Fatalf("failed to ensure that %q exists as a directory: %v", *dir, err)
 	}
 
-	// TODO: Read episodesPerSeason from a configuration file.
-	filenameGenerator, err := NewSequentialFilenameGenerator(3, *startIdx)
+	if *confPath == "" {
+		*confPath = fmt.Sprintf("%s/%s", *dir, defaultConfName)
+	}
+	conf, err := NewConfig(*confPath)
+	if err != nil {
+		log.Fatalf("failed to create config: %v", err)
+	}
+
+	var filenameGenerator FilenameGenerator
+	switch conf.Mode {
+	case VideoModeMovie:
+		filenameGenerator = infra.NewMovieFilenameGenerator(*startIdx)
+	case VideoModeSeries:
+		filenameGenerator, err = infra.NewSeriesFilenameGenerator(conf.EpisodesPerSeason, *startIdx)
+		if err != nil {
+			log.Fatalf("failed to create series filename generator: %v", err)
+		}
+	default:
+		log.Fatalf("unsupported mode: %v (supported modes: [%s, %s])", conf.Mode, VideoModeMovie, VideoModeSeries)
+	}
+
 	if err != nil {
 		log.Fatalf("failed to create a new filename generator: %v", err)
 	}
 	if err := saveClips(context.Background(), *dir, filenameGenerator); err != nil {
 		log.Fatalf("failed to save clips: %v", err)
 	}
-}
-
-// FilenameGenerator generates the filenames to be used when writing screenshots to the disk.
-type FilenameGenerator interface {
-	// Gen generates a filename to be used.
-	// Note that calling this method may change the internal state of the corresponding FilenameGenerator.
-	Gen() string
-}
-
-func saveClips(ctx context.Context, dir string, filenameGenerator FilenameGenerator) error {
-	ch := clipboard.Watch(ctx, clipboard.FmtImage)
-	log.Println("Start to watch for clips...")
-	for {
-		select {
-		case <-ctx.Done():
-			return nil
-		case img := <-ch:
-			fileName := filenameGenerator.Gen()
-
-			_, err := os.Stat(fileName)
-			if !errors.Is(err, os.ErrNotExist) {
-				if err != nil {
-					return fmt.Errorf("failed to stat %q: %w", fileName, err)
-				}
-				return fmt.Errorf("file already exists: %q", fileName)
-			}
-
-			if err := writeImgToFile(img, fileName); err != nil {
-				return fmt.Errorf("failed to write the clip to %q: %w", fileName, err)
-			}
-			log.Printf("Wrote to %q successfully!", fileName)
-		}
-	}
-}
-
-func writeImgToFile(img []byte, fileName string) error {
-	file, err := os.Create(fileName)
-	if err != nil {
-		return fmt.Errorf("failed to create the file: %w", err)
-	}
-	defer file.Close()
-
-	if _, err := file.Write(img); err != nil {
-		return fmt.Errorf("failed to write to the file: %w", err)
-	}
-	return nil
 }

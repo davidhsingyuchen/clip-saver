@@ -62,23 +62,27 @@ type FilenameGenerator interface {
 func saveClips(ctx context.Context, dir string, filenameGenerator FilenameGenerator) error {
 	ch := clipboard.Watch(ctx, clipboard.FmtImage)
 	log.Println("Start to watch for clips...")
-	for img := range ch {
-		fileName := filenameGenerator.Gen()
+	for {
+		select {
+		case <-ctx.Done():
+			return nil
+		case img := <-ch:
+			fileName := filenameGenerator.Gen()
 
-		_, err := os.Stat(fileName)
-		if !errors.Is(err, os.ErrNotExist) {
-			if err != nil {
-				return fmt.Errorf("failed to stat %q: %w", fileName, err)
+			_, err := os.Stat(fileName)
+			if !errors.Is(err, os.ErrNotExist) {
+				if err != nil {
+					return fmt.Errorf("failed to stat %q: %w", fileName, err)
+				}
+				return fmt.Errorf("file already exists: %q", fileName)
 			}
-			return fmt.Errorf("file already exists: %q", fileName)
-		}
 
-		if err := writeImgToFile(img, fileName); err != nil {
-			return fmt.Errorf("failed to write the clip to %q: %w", fileName, err)
+			if err := writeImgToFile(img, fileName); err != nil {
+				return fmt.Errorf("failed to write the clip to %q: %w", fileName, err)
+			}
+			log.Printf("Wrote to %q successfully!", fileName)
 		}
-		log.Printf("Wrote to %q successfully!", fileName)
 	}
-	return nil
 }
 
 func writeImgToFile(img []byte, fileName string) error {

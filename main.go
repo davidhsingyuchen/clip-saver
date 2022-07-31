@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
-	"strconv"
 
 	"golang.design/x/clipboard"
 )
@@ -45,18 +43,27 @@ func main() {
 		log.Fatalf("failed to ensure that %q exists as a directory: %v", *dir, err)
 	}
 
-	if err := saveClips(context.Background(), *dir, *startIdx); err != nil {
+	// TODO: Read episodesPerSeason from a configuration file.
+	filenameGenerator := NewSequentialFilenameGenerator(3, *startIdx)
+	if err := saveClips(context.Background(), *dir, filenameGenerator); err != nil {
 		log.Fatalf("failed to save clips: %v", err)
 	}
 }
 
-func saveClips(ctx context.Context, dir string, startIdx int) error {
-	i := startIdx
+// FilenameGenerator generates the filenames to be used when writing screenshots to the disk.
+type FilenameGenerator interface {
+	// Gen generates a filename to be used.
+	// Note that calling this method may change the internal state of the corresponding FilenameGenerator.
+	Gen() string
+	// Cleanup terminates the FilenameGenerator instance and releases its resources (e.g., goroutines).
+	Cleanup()
+}
+
+func saveClips(ctx context.Context, dir string, filenameGenerator FilenameGenerator) error {
 	ch := clipboard.Watch(ctx, clipboard.FmtImage)
 	log.Println("Start to watch for clips...")
 	for img := range ch {
-		fileName := filepath.Join(dir, strconv.Itoa(i)) + fileExt
-		i++
+		fileName := filenameGenerator.Gen()
 
 		_, err := os.Stat(fileName)
 		if !errors.Is(err, os.ErrNotExist) {

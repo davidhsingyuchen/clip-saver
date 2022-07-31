@@ -44,7 +44,10 @@ func main() {
 	}
 
 	// TODO: Read episodesPerSeason from a configuration file.
-	filenameGenerator := NewSequentialFilenameGenerator(3, *startIdx)
+	filenameGenerator, err := NewSequentialFilenameGenerator(3, *startIdx)
+	if err != nil {
+		log.Fatalf("failed to create a new filename generator: %v", err)
+	}
 	if err := saveClips(context.Background(), *dir, filenameGenerator); err != nil {
 		log.Fatalf("failed to save clips: %v", err)
 	}
@@ -55,8 +58,6 @@ type FilenameGenerator interface {
 	// Gen generates a filename to be used.
 	// Note that calling this method may change the internal state of the corresponding FilenameGenerator.
 	Gen() string
-	// Cleanup terminates the FilenameGenerator instance and releases its resources (e.g., goroutines).
-	Cleanup()
 }
 
 func saveClips(ctx context.Context, dir string, filenameGenerator FilenameGenerator) error {

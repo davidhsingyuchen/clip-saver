@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	version = "v1.0.0"
+	version = "v1.1.0"
 
 	dirPerm         = 0700
 	defaultConfName = "clip-saver.yaml"
@@ -29,8 +29,9 @@ func main() {
 		)
 		flag.PrintDefaults()
 	}
-	dir := flag.String("dir", "", "required; the directory to save the clipped images; "+
-		"if it does not exist yet, this program will attempt to create it")
+	dir := flag.String("dir", "", "optional; the directory to save the clipped images; "+
+		"if it does not exist yet, this program will attempt to create it; "+
+		"if it is not specified, the current working directory will be used.")
 	confPath := flag.String("conf", "", "optional; the path to the configuration file; "+
 		fmt.Sprintf("if it is not provided, {$dir}/%s is used; ", defaultConfName)+
 		"if the file does not exist, movie mode instead of TV series mode is assumed")
@@ -43,7 +44,11 @@ func main() {
 	}
 
 	if *dir == "" {
-		log.Fatalln("--dir is required")
+		wd, err := os.Getwd()
+		if err != nil {
+			log.Fatalf("failed to get the current working directory: %v", err)
+		}
+		*dir = wd
 	}
 	if err := os.MkdirAll(*dir, 0700); err != nil {
 		log.Fatalf("failed to ensure that %q exists as a directory: %v", *dir, err)

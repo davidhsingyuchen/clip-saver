@@ -5,79 +5,111 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sync"
+	"strconv"
+	"strings"
 )
 
 const (
-	abbrSeason     = "S"
-	abbrEpisode    = "E"
-	cmdPrevEpisode = "<"
-	cmdNextEpisode = ">"
+	cmdPrevEpisode        = "<"
+	cmdNextEpisode        = ">"
+	episodeSeqNoSeparator = "-"
 )
 
 // SeriesFilenameGenerator generates filenames for screenshots of a TV series.
 type SeriesFilenameGenerator struct {
 	seqNo int
-
-	// episodesPerSeason should be initialized by the constructor and never be changed thereafter.
-	episodesPerSeason int
-
-	// mu protects curSeason and curEpisode.
-	mu                    sync.RWMutex
-	curSeason, curEpisode int
+	ewl   *episodeWithLock
 }
 
-// NewSeriesFilenameGenerator initializes and returns a new SeriesFilenameGenerator.
-func NewSeriesFilenameGenerator(episodesPerSeason, seqNo int) (*SeriesFilenameGenerator, error) {
+// NewSeriesFilenameGenerator expects dir to be the directory containing the screenshots.
+func NewSeriesFilenameGenerator(dir string, episodesPerSeason int) (*SeriesFilenameGenerator, error) {
 	if episodesPerSeason <= 0 {
 		return nil, fmt.Errorf("episodesPerSeason must be nonnegative, but got %d", episodesPerSeason)
 	}
-	g := &SeriesFilenameGenerator{
-		episodesPerSeason: episodesPerSeason,
-		// TODO: Automatically detects the last idx and the last episode.
-		seqNo:      seqNo,
-		curSeason:  1,
-		curEpisode: 1,
+
+	g := &SeriesFilenameGenerator{}
+	seqNos, episodes, err := g.parseSeqNosAndEpisodes(dir)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse sequence numbers and episodes from dir: %w", err)
 	}
-	go g.adjustCurEpisode()
+	g.seqNo = nextSeqNo(seqNos)
+	g.ewl = g.nextEpisode(episodes, episodesPerSeason)
+
+	log.Printf("Next filename that will be used: %s", g.gen())
+	go g.watchEpisodeChanges()
 	return g, nil
 }
 
 func (g *SeriesFilenameGenerator) Gen() string {
-	g.mu.RLock()
-	defer g.mu.RUnlock()
-	return fmt.Sprintf("%s%d%s%d-%d", abbrSeason, g.curSeason, abbrEpisode, g.curEpisode, g.seqNo)
+	ret := g.gen()
+	g.seqNo++
+	return ret
 }
 
-func (g *SeriesFilenameGenerator) adjustCurEpisode() {
+func (g *SeriesFilenameGenerator) gen() string {
+	return fmt.Sprintf("%s%s%d", g.ewl, episodeSeqNoSeparator, g.seqNo)
+}
+
+func (g *SeriesFilenameGenerator) parseSeqNosAndEpisodes(dir string) ([]int, []*episode, error) {
+	fs, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to read directory: %w", err)
+	}
+
+	var seqNos []int
+	var episodes []*episode
+	// We omit errors (e.g., -1) because there may be files other than the screenshots.
+	for _, f := range fs {
+		filename := trimExtension(f.Name())
+
+		idx := strings.Index(filename, episodeSeqNoSeparator)
+		if idx == -1 {
+			continue
+		}
+		strEpisode, strSeqNo := filename[:idx], filename[idx+1:]
+
+		episode, err := newEpisode(strEpisode)
+		if err != nil {
+			continue
+		}
+		seqNo, err := strconv.Atoi(strSeqNo)
+		if err != nil {
+			continue
+		}
+
+		seqNos = append(seqNos, seqNo)
+		episodes = append(episodes, episode)
+	}
+
+	return seqNos, episodes, nil
+}
+
+func (g *SeriesFilenameGenerator) nextEpisode(episodes []*episode, episodesPerSeason int) *episodeWithLock {
+	if len(episodes) == 0 {
+		return newEpisodeWithLock(minEpisode(), episodesPerSeason)
+	}
+
+	e := newEpisodeWithLock(max(episodes, lessThanEpisode), episodesPerSeason)
+	e.increment()
+	return e
+}
+
+func (g *SeriesFilenameGenerator) watchEpisodeChanges() {
+	const methodName = "watchEpisodeChanges"
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		g.mu.Lock()
-		// Invariant: 1 <= curEpisode <= episodesPerSeason
-		// The way curEpisode is initialized ensures the invariant.
 		switch scanner.Text() {
 		case cmdPrevEpisode:
-			if g.curEpisode > 1 {
-				g.curEpisode--
-			} else {
-				g.curSeason--
-				g.curEpisode = g.episodesPerSeason
-			}
+			g.ewl.decrement()
 		case cmdNextEpisode:
-			if g.curEpisode < g.episodesPerSeason {
-				g.curEpisode++
-			} else {
-				g.curSeason++
-				g.curEpisode = 1
-			}
+			g.ewl.increment()
 		default:
 			continue
 		}
-		log.Printf("adjustCurEpisode: current episode: %s%d%s%d", abbrSeason, g.curSeason, abbrEpisode, g.curEpisode)
-		g.mu.Unlock()
+		log.Printf("%s: current episode: %s", methodName, g.ewl)
 	}
 
 	if scanner.Err() != nil {
-		log.Printf("adjustCurEpisode: failed to scan from stdin: %v", scanner.Err())
+		log.Printf("%s: failed to scan from stdin: %v", methodName, scanner.Err())
 	}
 }

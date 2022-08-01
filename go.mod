@@ -1,6 +1,6 @@
 module github.com/davidhsingyuchen/clip-saver
 
-go 1.17
+go 1.18
 
 require golang.design/x/clipboard v0.5.3
 

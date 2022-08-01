@@ -8,7 +8,7 @@ When I'm watching movies on Windows and feeling like taking a screenshot, I pref
 
 ## How It Works
 
-1. Start this program and specify an directory to store the clips.
+1. Start this program. Run `clip-saver --help` to learn more about what it can do.
 1. Start watching the movie.
 1. Every time an image is copied to the system clipboard, a corresponding image file is created in the specified directory.
 1. Finish watching the movie.

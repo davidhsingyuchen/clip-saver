@@ -14,7 +14,6 @@ type MovieFilenameGenerator struct {
 
 // NewMovieFilenameGenerator expects dir to be the directory containing the screenshots.
 func NewMovieFilenameGenerator(dir string) (*MovieFilenameGenerator, error) {
-	// TODO: Automatically detects the last index used.
 	g := &MovieFilenameGenerator{}
 	seqNos, err := g.parseSeqNos(dir)
 	if err != nil {

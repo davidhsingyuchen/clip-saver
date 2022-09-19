@@ -5,12 +5,16 @@ import (
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/davidhsingyuchen/clip-saver/service"
 )
 
 // MovieFilenameGenerator generates filenames for screenshots of a movie.
 type MovieFilenameGenerator struct {
 	seqNo int
 }
+
+var _ service.FilenameGenerator = (*MovieFilenameGenerator)(nil)
 
 // NewMovieFilenameGenerator expects dir to be the directory containing the screenshots.
 func NewMovieFilenameGenerator(dir string) (*MovieFilenameGenerator, error) {

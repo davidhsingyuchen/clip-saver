@@ -7,6 +7,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/davidhsingyuchen/clip-saver/service"
 )
 
 const (
@@ -20,6 +22,8 @@ type SeriesFilenameGenerator struct {
 	seqNo int
 	ewl   *episodeWithLock
 }
+
+var _ service.FilenameGenerator = (*SeriesFilenameGenerator)(nil)
 
 // NewSeriesFilenameGenerator expects dir to be the directory containing the screenshots.
 func NewSeriesFilenameGenerator(dir string, episodesPerSeason int) (*SeriesFilenameGenerator, error) {

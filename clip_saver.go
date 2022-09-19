@@ -37,23 +37,10 @@ func saveClips(ctx context.Context, dir string, filenameGenerator FilenameGenera
 				return fmt.Errorf("failed to stat %q: %w", fileName, err)
 			}
 
-			if err := writeImgToFile(img, fileName); err != nil {
+			if err := os.WriteFile(fileName, img, 0644); err != nil {
 				return fmt.Errorf("failed to write the clip to %q: %w", fileName, err)
 			}
 			log.Printf("Wrote to %q successfully!", fileName)
 		}
 	}
-}
-
-func writeImgToFile(img []byte, fileName string) error {
-	file, err := os.Create(fileName)
-	if err != nil {
-		return fmt.Errorf("failed to create the file: %w", err)
-	}
-	defer file.Close()
-
-	if _, err := file.Write(img); err != nil {
-		return fmt.Errorf("failed to write to the file: %w", err)
-	}
-	return nil
 }

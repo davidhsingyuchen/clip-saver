@@ -1,4 +1,4 @@
-package main
+package service
 
 import (
 	"context"
@@ -21,7 +21,7 @@ type FilenameGenerator interface {
 	Gen() string
 }
 
-func saveClips(ctx context.Context, dir string, filenameGenerator FilenameGenerator) error {
+func SaveClips(ctx context.Context, dir string, filenameGenerator FilenameGenerator) error {
 	ch := clipboard.Watch(ctx, clipboard.FmtImage)
 	log.Println("Start to watch for clips...")
 	for {

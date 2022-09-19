@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/davidhsingyuchen/clip-saver/infra"
+	"github.com/davidhsingyuchen/clip-saver/service"
 )
 
 const (
@@ -62,7 +63,7 @@ func main() {
 		log.Fatalf("failed to create config: %v", err)
 	}
 
-	var filenameGenerator FilenameGenerator
+	var filenameGenerator service.FilenameGenerator
 	switch conf.Mode {
 	case VideoModeMovie:
 		filenameGenerator, err = infra.NewMovieFilenameGenerator(*dir)
@@ -81,7 +82,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create a new filename generator: %v", err)
 	}
-	if err := saveClips(context.Background(), *dir, filenameGenerator); err != nil {
+	if err := service.SaveClips(context.Background(), *dir, filenameGenerator); err != nil {
 		log.Fatalf("failed to save clips: %v", err)
 	}
 }

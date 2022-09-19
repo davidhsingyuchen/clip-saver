@@ -32,8 +32,7 @@ func NewConfig(path string) (*Config, error) {
 	}
 
 	var c Config
-	err = yaml.Unmarshal(bs, &c)
-	if err != nil {
+	if err := yaml.Unmarshal(bs, &c); err != nil {
 		return nil, fmt.Errorf("failed to parse the config file: %w", err)
 	}
 	return &c, nil

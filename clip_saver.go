@@ -31,12 +31,10 @@ func saveClips(ctx context.Context, dir string, filenameGenerator FilenameGenera
 		case img := <-ch:
 			fileName := fmt.Sprintf("%s.%s", filenameGenerator.Gen(), fileExt)
 
-			_, err := os.Stat(fileName)
-			if !errors.Is(err, os.ErrNotExist) {
-				if err != nil {
-					return fmt.Errorf("failed to stat %q: %w", fileName, err)
-				}
+			if _, err := os.Stat(fileName); err == nil {
 				return fmt.Errorf("file already exists: %q", fileName)
+			} else if !errors.Is(err, os.ErrNotExist) {
+				return fmt.Errorf("failed to stat %q: %w", fileName, err)
 			}
 
 			if err := writeImgToFile(img, fileName); err != nil {

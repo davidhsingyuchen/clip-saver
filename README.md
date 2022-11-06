@@ -33,15 +33,10 @@ If there is no screenshot (i.e., filenames conforming to the screenshot format) 
         print version information
 ```
 
-## Use It
+## Installation
 
-[Install Go](https://golang.org/doc/install).
-
-### Installation
-
-```sh
-go install -v github.com/davidhsingyuchen/clip-saver@latest
-```
+1. [Install Go](https://golang.org/doc/install).
+1. `go install -v github.com/davidhsingyuchen/clip-saver@latest`
 
 ## Release Process
 

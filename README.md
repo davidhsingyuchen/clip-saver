@@ -53,8 +53,9 @@ go build -v -o clip-saver
 
 ## Release Process
 
-1. The `version` constant in `main.go` is bumped according to [semantic versioning](https://semver.org/).
-1. A release corresponding to the updated version is cut manually via Github UI.
+1. Pull the open `release-please` PR ([example](https://github.com/davidhsingyuchen/clip-saver/pull/5)).
+1. Update the `version` constant in `main.go` according to the title of the PR and push the changes.
+1. Merge the updated `release-please` PR.
 
 ## Other Notes
 

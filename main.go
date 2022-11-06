@@ -20,22 +20,23 @@ const (
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: clip-saver --dir <dir>\n\n"+
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage: clip-saver [--dir <dir>] [--conf <conf-path>] \n\n"+
+			"Automatically save images from the system clipboard to the specified directory.\n\n"+
 			"If there is no screenshot (i.e., filenames conforming to the screenshot format) at the moment, "+
 			"the screenshots will be saved in <dir> as 1.png, 2.png, and so on; "+
 			"if there are some existing screenshots with the latest one being 5.png, "+
-			"the screenshots will be saved in <dir> as 6.png, 7.png, and so on.\n\n"+
-			`In "series" mode, the screenshots will be prefixed with the current episode, `+
-			"and one can press < and > to move to the previous and the next episode respectively.\n\n",
+			"the screenshots will be saved in <dir> as 6.png, 7.png, and so on.\n\n",
 		)
 		flag.PrintDefaults()
 	}
-	dir := flag.String("dir", "", "optional; the directory to save the clipped images; "+
-		"if it does not exist yet, this program will attempt to create it; "+
-		"if it is not specified, the current working directory will be used.")
-	confPath := flag.String("conf", "", "optional; the path to the configuration file; "+
-		fmt.Sprintf("if it is not provided, {$dir}/%s is used; ", defaultConfName)+
-		"if the file does not exist, movie mode instead of TV series mode is assumed")
+	dir := flag.String("dir", "", "optional; the directory to save the clipped images. "+
+		"If it does not exist yet, this program will attempt to create it. "+
+		"If it is not specified, the current working directory will be used.")
+	confPath := flag.String("conf", "", "optional; the path to the configuration file. "+
+		"For more details regarding the format of it and a working example, please check "+
+		"https://github.com/davidhsingyuchen/clip-saver/blob/main/clip-saver.yml. "+
+		fmt.Sprintf("If this flag is not present, <dir>/%s is used. ", defaultConfName)+
+		"If the file does not exist, movie mode instead of TV series mode is assumed.")
 	printVer := flag.Bool("version", false, "print version information")
 	flag.Parse()
 

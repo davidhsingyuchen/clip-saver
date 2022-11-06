@@ -10,7 +10,7 @@ import (
 
 type VideoMode string
 
-// Update the supported modes in main.go upon any addition/removal to the constants below.
+// Upon any addition/removal to the constants below, update the supported modes in both main.go and clip-saver.yml.
 const (
 	VideoModeMovie  VideoMode = "movie"
 	VideoModeSeries VideoMode = "series"

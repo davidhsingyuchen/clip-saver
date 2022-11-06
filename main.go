@@ -19,6 +19,7 @@ const (
 )
 
 func main() {
+	// Whenever the help message changes, please update the "How It Works" section in README.md.
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage: clip-saver [--dir <dir>] [--conf <conf-path>] \n\n"+
 			"Automatically save images from the system clipboard to the specified directory.\n\n"+

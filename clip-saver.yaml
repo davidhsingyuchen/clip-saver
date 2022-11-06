@@ -1,0 +1,13 @@
+# mode can be either "series" or "movie".
+#
+# In "series" mode, the screenshots will be prefixed with the current episode (i.e., n.png becomes SxEy-n.png).
+# When one finishes the current episode, he/she can enter ">" to make clip-saver start to prefix the screenshots with the next episode.
+# One can also enter "<" to tell clip-saver to go back to the previous episode.
+# When deducing the current episode upon initialization, the default is S1E1 if there is no screenshot.
+# If there are, the next episode of the latest episode is used because people usually finish an episode in one go.
+# For example, if the latest episode out of all the screenshots is S1E2, then the deduced current episode will be S1E3.
+mode: "series"
+# episodes_per_season is only applicable to "series" mode.
+# For example, setting it to 10 means that when it's S1E10 now,
+# and ">" is entered, then the current episode will be updated to be S2E1 instead of S1E11.
+episodes_per_season: 10

@@ -43,14 +43,6 @@ If there is no screenshot (i.e., filenames conforming to the screenshot format) 
 go install -v github.com/davidhsingyuchen/clip-saver@latest
 ```
 
-### Build From Source
-
-```sh
-git clone git@github.com:davidhsingyuchen/clip-saver.git
-cd clip-saver
-go build -v -o clip-saver
-```
-
 ## Release Process
 
 1. Pull the open `release-please` PR ([example](https://github.com/davidhsingyuchen/clip-saver/pull/5)).

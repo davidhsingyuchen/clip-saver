@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"golang.design/x/clipboard"
 )
@@ -29,7 +30,8 @@ func SaveClips(ctx context.Context, dir string, filenameGenerator FilenameGenera
 		case <-ctx.Done():
 			return nil
 		case img := <-ch:
-			fileName := fmt.Sprintf("%s.%s", filenameGenerator.Gen(), fileExt)
+			timestamp := time.Now().Format("2006-01-02_15-04-05")
+			fileName := fmt.Sprintf("%s_%s.%s", timestamp, filenameGenerator.Gen(), fileExt)
 
 			if _, err := os.Stat(fileName); err == nil {
 				return fmt.Errorf("file already exists: %q", fileName)

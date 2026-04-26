@@ -38,6 +38,8 @@ If there is no screenshot (i.e., filenames conforming to the screenshot format) 
 1. [Install Go](https://golang.org/doc/install).
 1. `go install -v github.com/davidhsingyuchen/clip-saver@latest`
 
+go install -v github.com/davidhsingyuchen/clip-saver@7b718d6be41bb06bbdbcad0b1542755bc95c7a62
+
 ## Release Process
 
 1. Pull the open `release-please` PR ([example](https://github.com/davidhsingyuchen/clip-saver/pull/5)).

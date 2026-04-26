@@ -1,14 +1,5 @@
 package infra
 
-import (
-	"path/filepath"
-	"strings"
-)
-
-func trimExtension(filename string) string {
-	return strings.TrimSuffix(filename, filepath.Ext(filename))
-}
-
 // max panics when arr does not contain any elements.
 func max[T any](arr []T, lessThan func(T, T) bool) T {
 	mx := arr[0]

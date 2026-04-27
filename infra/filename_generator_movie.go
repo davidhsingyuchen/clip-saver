@@ -47,6 +47,8 @@ func (g *MovieFilenameGenerator) parseSeqNos(dir string) ([]int, error) {
 	var seqNos []int
 	for _, f := range fs {
 		filename := trimExtension(f.Name())
+		// Strip timestamp prefix (format: YYYY-MM-DD_HH-MM-SS_)
+		filename = stripTimestampPrefix(filename)
 		// We omit errors because there may be files other than the screenshots.
 		if n, err := strconv.Atoi(filename); err == nil {
 			seqNos = append(seqNos, n)

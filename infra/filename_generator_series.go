@@ -65,6 +65,8 @@ func (g *SeriesFilenameGenerator) parseSeqNosAndEpisodes(dir string) ([]int, []*
 	// We omit errors (e.g., -1) because there may be files other than the screenshots.
 	for _, f := range fs {
 		filename := trimExtension(f.Name())
+		// Strip timestamp prefix (format: YYYY-MM-DD_HH-MM-SS_)
+		filename = stripTimestampPrefix(filename)
 
 		idx := strings.Index(filename, episodeSeqNoSeparator)
 		if idx == -1 {

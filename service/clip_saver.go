@@ -16,6 +16,9 @@ type FilenameGenerator interface {
 	// Gen generates a filename to be used.
 	// Note that calling this method may change the internal state of the corresponding FilenameGenerator.
 	Gen() string
+	// Peek returns the next file name that will be used,
+	// without changing the internal state of the generator.
+	Peek() string
 }
 
 func SaveClips(ctx context.Context, dir string, filenameGenerator FilenameGenerator) error {

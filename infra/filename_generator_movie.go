@@ -5,8 +5,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/davidhsingyuchen/clip-saver/domain"
-	"github.com/davidhsingyuchen/clip-saver/service"
+	"github.com/davidhsingyuchen/clip-saver/v2/domain"
+	"github.com/davidhsingyuchen/clip-saver/v2/service"
 )
 
 // MovieFilenameGenerator generates filenames for screenshots of a movie.

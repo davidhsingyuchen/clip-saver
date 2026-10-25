@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/davidhsingyuchen/clip-saver/domain"
+	"github.com/davidhsingyuchen/clip-saver/v2/domain"
 	"golang.design/x/clipboard"
 )
 

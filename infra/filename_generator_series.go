@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/davidhsingyuchen/clip-saver/domain"
-	"github.com/davidhsingyuchen/clip-saver/service"
+	"github.com/davidhsingyuchen/clip-saver/v2/domain"
+	"github.com/davidhsingyuchen/clip-saver/v2/service"
 )
 
 const (

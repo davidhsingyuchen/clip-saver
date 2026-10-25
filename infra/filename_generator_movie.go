@@ -2,7 +2,6 @@ package infra
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 
@@ -25,17 +24,16 @@ func NewMovieFilenameGenerator(dir string) (*MovieFilenameGenerator, error) {
 		return nil, fmt.Errorf("failed to init the sequence number: %w", err)
 	}
 	g.seqNo = nextSeqNo(seqNos)
-	log.Printf("Next filename that will be used: %s", g.gen())
 	return g, nil
 }
 
 func (g *MovieFilenameGenerator) Gen() string {
-	ret := g.gen()
+	ret := g.Peek()
 	g.seqNo++
 	return ret
 }
 
-func (g *MovieFilenameGenerator) gen() string {
+func (g *MovieFilenameGenerator) Peek() string {
 	return fmt.Sprint(g.seqNo)
 }
 

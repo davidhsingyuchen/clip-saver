@@ -84,6 +84,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create a new filename generator: %v", err)
 	}
+
+	log.Printf("Next raw filename that will be used: %s", filenameGenerator.Peek())
 	if err := service.SaveClips(context.Background(), *dir, filenameGenerator); err != nil {
 		log.Fatalf("failed to save clips: %v", err)
 	}

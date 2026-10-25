@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/davidhsingyuchen/clip-saver/compare/v2.0.0...v2.0.1) (2026-10-25)
+
+
+### Bug Fixes
+
+* update module path to include v2 ([#15](https://github.com/davidhsingyuchen/clip-saver/issues/15)) ([4b6e644](https://github.com/davidhsingyuchen/clip-saver/commit/4b6e6442d5c3691b3669fa79acb887c3cee85dc8))
+
 ## [2.0.0](https://github.com/davidhsingyuchen/clip-saver/compare/v1.1.1...v2.0.0) (2026-10-25)
 
 

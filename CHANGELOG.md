@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/davidhsingyuchen/clip-saver/compare/v2.0.1...v2.0.2) (2026-10-25)
+
+
+### Bug Fixes
+
+* bump to v2.0.2 in main.go ([#17](https://github.com/davidhsingyuchen/clip-saver/issues/17)) ([14e12bd](https://github.com/davidhsingyuchen/clip-saver/commit/14e12bdbbe999cfa8dbfdf9a9ae4516f25585420))
+
 ## [2.0.1](https://github.com/davidhsingyuchen/clip-saver/compare/v2.0.0...v2.0.1) (2026-10-25)
 
 

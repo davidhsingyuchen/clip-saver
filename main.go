@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/davidhsingyuchen/clip-saver/infra"
-	"github.com/davidhsingyuchen/clip-saver/service"
+	"github.com/davidhsingyuchen/clip-saver/v2/infra"
+	"github.com/davidhsingyuchen/clip-saver/v2/service"
 )
 
 const (

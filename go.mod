@@ -1,4 +1,4 @@
-module github.com/davidhsingyuchen/clip-saver
+module github.com/davidhsingyuchen/clip-saver/v2
 
 go 1.18
 

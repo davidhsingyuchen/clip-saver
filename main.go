@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	version = "v2.0.0"
+	version = "v2.0.2"
 
 	dirPerm         = 0700
 	defaultConfName = "clip-saver.yaml"

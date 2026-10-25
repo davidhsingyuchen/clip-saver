@@ -40,18 +40,17 @@ func NewSeriesFilenameGenerator(dir string, episodesPerSeason int) (*SeriesFilen
 	g.seqNo = nextSeqNo(seqNos)
 	g.ewl = g.nextEpisode(episodes, episodesPerSeason)
 
-	log.Printf("Next filename that will be used: %s", g.gen())
 	go g.watchEpisodeChanges()
 	return g, nil
 }
 
 func (g *SeriesFilenameGenerator) Gen() string {
-	ret := g.gen()
+	ret := g.Peek()
 	g.seqNo++
 	return ret
 }
 
-func (g *SeriesFilenameGenerator) gen() string {
+func (g *SeriesFilenameGenerator) Peek() string {
 	return fmt.Sprintf("%s%s%d", g.ewl, episodeSeqNoSeparator, g.seqNo)
 }
 

@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/davidhsingyuchen/clip-saver/domain"
 	"github.com/davidhsingyuchen/clip-saver/service"
 )
 
@@ -64,7 +65,7 @@ func (g *SeriesFilenameGenerator) parseSeqNosAndEpisodes(dir string) ([]int, []*
 	var episodes []*episode
 	// We omit errors (e.g., -1) because there may be files other than the screenshots.
 	for _, f := range fs {
-		filename := trimExtension(f.Name())
+		filename := domain.ExtractFileName(f.Name())
 
 		idx := strings.Index(filename, episodeSeqNoSeparator)
 		if idx == -1 {

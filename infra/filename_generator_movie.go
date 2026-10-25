@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/davidhsingyuchen/clip-saver/domain"
 	"github.com/davidhsingyuchen/clip-saver/service"
 )
 
@@ -46,7 +47,7 @@ func (g *MovieFilenameGenerator) parseSeqNos(dir string) ([]int, error) {
 
 	var seqNos []int
 	for _, f := range fs {
-		filename := trimExtension(f.Name())
+		filename := domain.ExtractFileName(f.Name())
 		// We omit errors because there may be files other than the screenshots.
 		if n, err := strconv.Atoi(filename); err == nil {
 			seqNos = append(seqNos, n)

@@ -7,11 +7,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/davidhsingyuchen/clip-saver/domain"
 	"golang.design/x/clipboard"
-)
-
-const (
-	fileExt = "png"
 )
 
 // FilenameGenerator generates the filenames to be used when writing screenshots to the disk.
@@ -29,7 +26,7 @@ func SaveClips(ctx context.Context, dir string, filenameGenerator FilenameGenera
 		case <-ctx.Done():
 			return nil
 		case img := <-ch:
-			fileName := fmt.Sprintf("%s.%s", filenameGenerator.Gen(), fileExt)
+			fileName := domain.FullFileName(filenameGenerator.Gen())
 
 			if _, err := os.Stat(fileName); err == nil {
 				return fmt.Errorf("file already exists: %q", fileName)
